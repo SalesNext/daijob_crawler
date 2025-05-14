@@ -34,7 +34,7 @@ def parse_company_detail(
     
     for label in labels:
         value =  "".join(response.xpath(f"//table//tr//th[span/text()='{label}']/following-sibling::td/text()").getall())
-        print(value)
+       
         for header, eng_text in CONTENT.items():
             if label == header:
                 setattr(data, eng_text, value)

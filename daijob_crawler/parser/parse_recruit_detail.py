@@ -26,7 +26,9 @@ CONTENT = {
     "韓国語能力": "job_korean_level",
     "勤務時間": "job_working_hours",
     "取扱い会社": "job_company_name",
-    "この求人の特徴": "job_feature",
+    "この求人の": "job_feature",
+    "勤務地": "job_location",
+
     
 }
 def parse_recruit_detail(
@@ -51,18 +53,22 @@ def parse_recruit_detail(
         categories.append(cat)
     data.job_category = categories
         
-        
+    
+    
     labels = response.xpath("//table//tr//th//span/text()").getall()
+    
+    missing_labels = list(labels-CONTENT.keys())
+    print(f"Missing labels: {missing_labels}")
     
     for label in labels:
         value =  "".join(response.xpath(f"//table//tr//th[span/text()='{label}']/following-sibling::td/text()").getall())
-        print(value)
+       
         for header, eng_text in CONTENT.items():
             if label == header:
                 if header == "仕事内容":
                     value = "".join(response.xpath("//table//tr//th[span//text()='仕事内容']/following-sibling::td/text()").getall())
                 setattr(data, eng_text, value)
-         
+             
     
     yield DataEvent("recruit", data)            
   

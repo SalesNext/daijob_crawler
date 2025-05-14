@@ -48,6 +48,7 @@ class Recruit(BaseModel):
     job_korean_level : Optional[str] = None
     job_company_url : Optional[str] = None
     job_company_name_sub: Optional[str] = None
+    job_location: Optional[str] = None
     
     
     
