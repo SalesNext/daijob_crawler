@@ -1,20 +1,20 @@
-[tool.poetry]
+[project]
 name = "daijob-crawler"
 version = "0.1.0"
 description = ""
-authors = ["hai-pham-theinfitech <hai_phamn@theinfitech.com>"]
+authors = [
+    { name = "hai-pham-theinfitech", email = "hai_phamn@theinfitech.com" }
+]
+requires-python = "~=3.9.13"
 
+dependencies = []
 
-
-[tool.poetry.dependencies]
-python = "^3.9.13"
-
-[tool.poetry.dev-dependencies]
-salesnext-crawler = { git = "git@github.com:SalesNext/salesnext-crawler.git", branch = "event" }
-
-[tool.poetry.group.dev.dependencies]
-ipykernel = "^6.29.5"
+[project.optional-dependencies]
+dev = [
+    "salesnext-crawler @ git+ssh://git@github.com/SalesNext/salesnext-crawler.git@event",
+    "ipykernel>=6.29.5,<7.0.0"
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
