@@ -24,6 +24,7 @@ class Recruit(BaseModel):
     job_id : Optional[str] = None
     job_industry : Optional[str] = None
     job_title : Optional[str] = None
+    job_company_id : Optional[str] = None
     job_industry : Optional[str] = None
     job_name_title : Optional[str] = None
     job_company_name : Optional[str] = None

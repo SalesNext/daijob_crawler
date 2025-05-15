@@ -6,23 +6,33 @@ from salesnext_crawler.events import CrawlEvent, Event, SitemapEvent
 from scrapy import Request
 import pyarrow as pa    
 
-class CrawlType(str,Enum):
-    CRAWL_FROM_TYPE = "CRAWL_FROM_TYPE"
-    CRAWL_FROM_PREFECTURE = "CRAWL_FROM_PREFECTURE"
-    CRAWL_FROM_MASTER_COMPANY = "CRAWL_FROM_MASTER_COMPANY"
-    
 class DaijobCrawler(ScrapyCrawler):
     def __init__(self, daily: bool = False, timeout: int = 1800,
-                 crawl_type : list[CrawlType] = [CrawlType.CRAWL_FROM_MASTER_COMPANY,
-                                                 ]) -> None:
+                 ) -> None:
         self.daily = daily
-        self.crawl_type = crawl_type
+     
     def start(self) -> Iterable[Event]: 
-       yield CrawlEvent(
-           request=Request("https://www.daijob.com/jobs/search_result?job_post_language=2&submit.x=28&submit.y=10&page=1&sort_order=3"),
-           metadata= None , 
-           callback= parse_recruit_list,
-       )
+       crawled_company_ids = []
+       crawled_recruit_ids = []
+       if self.daily:
+            crawled_recruit_table : pa.Table = self.readers["recruit_detail"].read()
+            crawled_recruit_ids = crawled_recruit_table.select(["job_id"]).drop_null().to_pydict()["job_id"]
+            crawled_recruit_ids = list(crawled_recruit_ids)
+            
+            crawled_company_table : pa.Table = self.readers["company_detail"].read()
+            crawled_company_ids = crawled_company_table.select(["company_id"]).drop_null().to_pydict()["company_id"]
+            crawled_company_ids = list(crawled_company_ids) 
+       
+       
+       for page in range(1,600):
+        yield CrawlEvent(
+            request=Request(f"https://www.daijob.com/jobs/search_result?job_post_language=2&job_search_form_hidden=1&page={page}&sort_order=3"),
+            metadata= {
+                "crawled_company_ids": crawled_company_ids,
+                "crawled_recruit_ids": crawled_recruit_ids,
+            }, 
+            callback= parse_recruit_list,
+        )
        
       
        
