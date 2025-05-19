@@ -19,15 +19,15 @@ def parse_recruit_list(
         if 'jobs/detail/' in url:
             urls.append(url)
     urls = list(set(urls))
-    # next_page = response.xpath("//li[@class='next']/a/@href").get()
-    # next_page = response.urljoin(next_page)
-    # if next_page:
-    #     yield CrawlEvent(
-    #         request=Request(next_page),
-    #         metadata={'crawled_recruit_ids': crawled_recruit_ids,
-    #                   'crawled_company_ids': crawled_company_ids},
-    #         callback=parse_recruit_list,
-    #     )
+    next_page = response.xpath("//li[@class='next']/a/@href").get()
+    next_page = response.urljoin(next_page)
+    if next_page:
+        yield CrawlEvent(
+            request=Request(next_page),
+            metadata={'crawled_recruit_ids': crawled_recruit_ids,
+                      'crawled_company_ids': crawled_company_ids},
+            callback=parse_recruit_list,
+        )
     
     for url in urls:
         url = 'https://www.daijob.com' + url
