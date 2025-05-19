@@ -15,11 +15,11 @@ class DaijobCrawler(ScrapyCrawler):
        crawled_company_ids = []
        crawled_recruit_ids = []
        if self.daily:
-            crawled_recruit_table : pa.Table = self.readers["recruit_detail"].read()
+            crawled_recruit_table : pa.Table = self.readers["recruit"].read()
             crawled_recruit_ids = crawled_recruit_table.select(["job_id"]).drop_null().to_pydict()["job_id"]
             crawled_recruit_ids = list(crawled_recruit_ids)
             
-            crawled_company_table : pa.Table = self.readers["company_detail"].read()
+            crawled_company_table : pa.Table = self.readers["company"].read()
             crawled_company_ids = crawled_company_table.select(["company_id"]).drop_null().to_pydict()["company_id"]
             crawled_company_ids = list(crawled_company_ids) 
        
