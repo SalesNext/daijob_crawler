@@ -24,9 +24,9 @@ class DaijobCrawler(ScrapyCrawler):
             crawled_company_ids = list(crawled_company_ids) 
        
        
-       for page in range(1,600):
-        yield CrawlEvent(
-            request=Request(f"https://www.daijob.com/jobs/search_result?job_post_language=2&job_search_form_hidden=1&page={page}&sort_order=3"),
+       
+       yield CrawlEvent(
+            request=Request(f"https://www.daijob.com/jobs/search_result?job_post_language=2&job_search_form_hidden=1&page=1&sort_order=3"),
             metadata= {
                 "crawled_company_ids": crawled_company_ids,
                 "crawled_recruit_ids": crawled_recruit_ids,
